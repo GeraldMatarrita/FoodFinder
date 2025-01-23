@@ -1,0 +1,182 @@
+.App {
+  text-align: center;
+}
+
+:root {
+  --primary-orange: #e95420;
+  --primary-orange-hover: #df521e;
+  --light-orange: #f2995e;
+  --secondary-purple: #772953;
+  --secondary-purple-hover: #6c2350;
+  --ligth-grey: #e9ecef;
+  --link-color: #61dafb;
+  --background-color: #f2f2f2;
+  --box-shadow-color: rgba(0, 0, 0, 0.1);
+  --hover-box-shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.categories {
+  display: flex;
+  justify-content: center; /* Centra los elementos */
+  flex-wrap: wrap; /* Permite que los elementos pasen a nuevas filas */
+}
+
+.category-item {
+  flex: 1 1 auto;
+  max-width: 120px; /* Ajusta el ancho máximo para mantener proporción */
+  height: 130px; /* Ajusta la altura */
+  padding: 0.5rem 1rem; /* Reduce el relleno (padding) horizontal y vertical */
+  border-radius: 45%; /* Ajusta el borde para que sea más ovalado */
+  background-color: #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  margin: auto 0.5rem; /* Ajusta el margen horizontal */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Opcional: agrega una sombra ligera */
+  transition: transform 0.3s ease, box-shadow 0.5s;
+}
+
+.category-item:hover {
+  transform: scale(1.08); /* Ajusta el tamaño al hacer hover */
+  animation-delay: 0ms;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Opcional: agrega una sombra más pronunciada */
+}
+
+.category-item.selected-category {
+  background-color: white; 
+  border: 2px solid var(--primary-orange-hover); 
+}
+
+.category-icon {
+  width: 40%; /* Ajusta el tamaño relativo al contenedor */
+  height: auto; /* Mantén la proporción */
+}
+
+.category-item p {
+  font-size: clamp(0.8rem, 2.5vw, 1rem); /* Ajusta entre un mínimo, relativo y máximo */
+  margin-bottom: 0;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .category-item {
+    margin: auto 1rem; /* Ajusta el margen horizontal según el tamaño del viewport */
+    flex: 1 1 calc(50% - 0.5rem); 
+    max-width: calc(30% - 0.5rem);
+    height: 90px;
+  }
+
+  .category-icon {
+    width: 50%;
+    height: 30%;
+  }
+
+  .category-item p {
+    font-size: clamp(0.5rem, 4vw, 0.7rem); /* Ajusta el tamaño del texto según el viewport */
+  }
+
+  .category-item {
+    margin: 0.5rem auto; /* Asegura un mejor centrado */
+  }
+}
+
+h4 {
+    color: grey !important;
+}
+
+.icon {
+  padding-top: 5px;
+  width: 10%;
+  height: 6%; 
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.icon:hover {
+  transform: scale(1.08);
+}
+
+@media (max-width: 768px) {
+  .icon {
+    width: 25px;
+  }
+}
+
+.restaurant-icon {
+  height: 80px;
+  width: 80px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background-color: white;
+  padding: 5px;
+}
+
+.add-restaurant-icon {
+  height: 80px;
+  width: 80px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.restaurant-info h5 {
+  font-size: 1rem;
+  margin: 0;
+  font-weight: bold;
+}
+
+.restaurant-info p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+section {
+  margin: 3em 0;
+}
+
+/* Ajuste de botones en diferentes tamaños de pantalla */
+@media (max-width: 768px) {
+  .btn-lg {
+    font-size: 0.6rem !important;
+    padding: 0.6rem 1rem !important;
+  }
+}

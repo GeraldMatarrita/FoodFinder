@@ -1,0 +1,13 @@
+.container {
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  form label {
+    font-weight: bold;
+  }
+  
+  .btn-lg {
+    width: 150px;
+  }
+  

@@ -1,0 +1,73 @@
+.restaurant-card {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 200px;
+  width: 370px;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 30px;
+  flex: 1 1 calc(33.333% - 1rem);
+}
+
+/* Estilo base */
+.search-bar-wrapper .search-bar {
+    width: 100%;
+  }
+  
+  /* Estilo para pantallas pequeñas */
+  @media (max-width: 768px) {
+    .search-bar-wrapper .search-bar {
+      width: 70%; /* Reduce el tamaño de la barra al 70% del contenedor */
+    }
+  }
+  
+
+.restaurant-card img {
+  max-width: 100%;
+  height: auto;
+}
+
+.chicken-restaurant {
+  background-image: url("../../assets/categories/pollo-img.png");
+}
+
+.hamburguer-restaurant {
+  background-image: url("../../assets/categories/hamburguesa-img.png");
+}
+
+.add-restaurant {
+  background-image: linear-gradient(to bottom, var(--light-orange), white);
+  background-size: cover;
+  background-position: center;
+}
+
+.restaurant-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.restaurant-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro semi-transparente */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+#cerrarSesion {
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
+}
