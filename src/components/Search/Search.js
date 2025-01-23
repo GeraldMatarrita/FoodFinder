@@ -64,7 +64,7 @@ export const Search = () => {
             alt="Administrator"
             className="icon"
           />
-          <button className="btn btn-dark ms-4 btn-lg" onClick={handleLogout}>
+          <button className="btn btn-dark ms-4 btn-lg" id="cerrarSesion" onClick={handleLogout}>
             Cerrar Sesión
           </button>
         </div>
