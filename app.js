@@ -276,17 +276,17 @@ app.get('/api/users', async (req, res) => {
 /* ============================
    Sign Up: Registrar usuario nuevo
    Endpoint: POST /api/signup
-   Body: { "email": "...", "nombre": "...", "password": "..." }
+   Body: { "nombre": "...", "email": "...", "password": "..." }
 =============================== */
 app.post('/api/signup', async (req, res) => {
-    const { email, nombre, password } = req.body;
+    const { nombre, email, password } = req.body; // Corrección del orden
     try {
-        const result = await pool.query('SELECT registrar_usuario($1, $2, $3) as message;', [email, nombre, password]);
-        const message = result.rows[0].message;
-        if (message === 'User registered') {
-            res.json({ success: true, message });
+        const result = await pool.query('SELECT * FROM registrar_usuario($1, $2, $3);', [nombre, email, password]);
+
+        if (result.rows.length > 0 && result.rows[0].codigo === 1) {
+            res.json({ success: true, user: result.rows[0] });
         } else {
-            res.status(400).json({ success: false, message });
+            res.status(400).json({ success: false, message: 'El usuario ya existe' });
         }
     } catch (err) {
         console.error(err);
@@ -303,16 +303,24 @@ app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
     try {
         const result = await pool.query('SELECT * FROM verificar_usuario_log_in($1, $2);', [email, password]);
+
         if (result.rows.length > 0) {
-            res.json({ success: true, user: result.rows[0] });
+            const user = result.rows[0];
+
+            if (user.codigo === 1) {
+                res.json({ success: true, user });
+            } else {
+                res.status(401).json({ success: false, message: 'Credenciales inválidas' });
+            }
         } else {
-            res.status(401).json({ success: false, message: 'Credenciales inválidas' });
+            res.status(500).json({ success: false, message: 'Error inesperado' });
         }
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: 'Error interno del servidor' });
     }
 });
+
 
 
 
