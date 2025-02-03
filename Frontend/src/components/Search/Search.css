@@ -1,0 +1,16 @@
+.filters-section {
+    margin: 20px 0;
+  }
+  
+  .filters-container {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .form-select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff8f8;
+    flex: 1; /* Hace que los selects tengan el mismo tamaño */
+  }

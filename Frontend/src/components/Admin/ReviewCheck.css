@@ -1,0 +1,50 @@
+.review-container {
+  max-width: 800px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.review-card {
+  background-color: #ffe5d9;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review-card h5 {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.report-reason {
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.review-content {
+  background-color: #ffccbc;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.review-author {
+  font-weight: bold;
+}
+
+.review-rating {
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.review-actions {
+  display: flex;
+  justify-content: space-around;
+}

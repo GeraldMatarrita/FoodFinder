@@ -1,0 +1,30 @@
+.users-container {
+  max-width: 800px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.user-card {
+  background-color: #ffe5d9;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+.user-card h5 {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.user-card p {
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.user-actions {
+  display: flex;
+  justify-content: space-around;
+}

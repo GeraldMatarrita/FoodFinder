@@ -1,0 +1,20 @@
+body {
+  background: linear-gradient(135deg, #fdf5e6, #ffc8a2);
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 900px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.logo {
+  margin-bottom: 5px;
+  width: 500px;
+}
