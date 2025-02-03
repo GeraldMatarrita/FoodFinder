@@ -54,6 +54,7 @@ app.post('/api/favoritos', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
+//NO
 
 /* ============================
    Buscar restaurante por nombre
@@ -104,6 +105,7 @@ app.post('/api/restaurant-request', async (req, res) => {
         res.status(500).json({ success: false, message: err.message });
     }
 });
+//NO
 
 /* ==================================================
    Obtener todas las provincias
