@@ -175,7 +175,8 @@ app.get('/api/favorites', async (req, res) => {
    Endpoint: GET /api/restaurant-info/:id
 ============================= */
 app.get('/api/restaurant-info', async (req, res) => {
-    const restauranteId = parseInt(req.params.id);
+    const { id } = req.query;
+    const restauranteId = parseInt(id, 10);
     if (isNaN(restauranteId)) {
         return res.status(400).json({ error: 'El id del restaurante debe ser un número válido' });
     }
@@ -192,6 +193,7 @@ app.get('/api/restaurant-info', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
 
 /* ============================
    Obtener todos los reportes de reseña
@@ -212,13 +214,15 @@ app.get('/api/reportes-resena', async (req, res) => {
    Endpoint: GET /api/reviews/:id
 ============================= */
 app.get('/api/reviews', async (req, res) => {
-    const restauranteId = parseInt(req.params.id);
+    const { id } = req.query;
+    const restauranteId = parseInt(id, 10);  // Aquí se hace la conversión a entero
     if (isNaN(restauranteId)) {
         return res.status(400).json({ error: 'El id del restaurante debe ser un número válido' });
     }
 
     try {
-        const result = await pool.query('SELECT * FROM obtener_reseñas_restaurante($1);', [restauranteId]);
+        // Realizamos la consulta a la función definida en PostgreSQL
+        const result = await pool.query('SELECT * FROM obtener_reviews_restaurante($1);', [restauranteId]);
         if (result.rows.length > 0) {
             res.json(result.rows);
         } else {
@@ -229,6 +233,7 @@ app.get('/api/reviews', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+//NO
 
 /* ============================
    Obtener restaurantes según tipo de comida
@@ -236,8 +241,15 @@ app.get('/api/reviews', async (req, res) => {
 =============================== */
 app.get('/api/restaurants', async (req, res) => {
     const { food } = req.query;
+
+    // Validar que food sea un número
+    const foodId = parseInt(food, 10);
+    if (isNaN(foodId)) {
+        return res.status(400).json({ error: 'El parámetro food debe ser un número' });
+    }
+
     try {
-        const result = await pool.query('SELECT * FROM obtener_restaurantes_por_tipo($1);', [food]);
+        const result = await pool.query('SELECT * FROM obtener_restaurantes_por_tipo($1);', [foodId]);
         res.json(result.rows);
     } catch (err) {
         console.error(err);
