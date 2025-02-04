@@ -313,14 +313,31 @@ app.get('/api/favorites', async (req, res) => {
 app.get('/api/restaurant-info', async (req, res) => {
     const { id } = req.query;
     const restauranteId = parseInt(id, 10);
+
     if (isNaN(restauranteId)) {
         return res.status(400).json({ error: 'El id del restaurante debe ser un número válido' });
     }
 
     try {
         const result = await pool.query('SELECT * FROM obtener_info_restaurante($1);', [restauranteId]);
+
         if (result.rows.length > 0) {
-            res.json(result.rows[0]);
+            const restaurante = result.rows[0];
+            res.json({
+                nombre: restaurante.nombre,
+                horario: restaurante.horario,
+                descripcion: restaurante.descripcion,
+                rangoprecio: restaurante.rangoprecio,
+                imagen: restaurante.imagen,
+                estado: restaurante.estado,
+                menu_descripcion: restaurante.menu_descripcion,
+                platillos: restaurante.platillos,  // Esto ya es un array de objetos
+                provincia_nombre: restaurante.provincia_nombre,
+                canton_nombre: restaurante.canton_nombre,
+                distrito_nombre: restaurante.distrito_nombre,
+                tipo_comida_nombre: restaurante.tipo_comida_nombre,
+                codigo: restaurante.codigo
+            });
         } else {
             res.status(404).json({ error: 'Restaurante no encontrado' });
         }
