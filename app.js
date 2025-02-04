@@ -219,14 +219,18 @@ app.get('/api/reportes-resena', async (req, res) => {
 ============================= */
 app.get('/api/reviews', async (req, res) => {
     const { id } = req.query;
-    const restauranteId = parseInt(id, 10);  // Aquí se hace la conversión a entero
+    const restauranteId = parseInt(id, 10);
+
     if (isNaN(restauranteId)) {
         return res.status(400).json({ error: 'El id del restaurante debe ser un número válido' });
     }
 
     try {
-        // Realizamos la consulta a la función definida en PostgreSQL
-        const result = await pool.query('SELECT * FROM obtener_reviews_restaurante($1);', [restauranteId]);
+        const result = await pool.query(
+            'SELECT * FROM obtener_reviews_restaurante($1);',
+            [restauranteId]
+        );
+
         if (result.rows.length > 0) {
             res.json(result.rows);
         } else {
@@ -237,7 +241,6 @@ app.get('/api/reviews', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
-//NO
 
 /* ============================
    Obtener restaurantes según tipo de comida
