@@ -103,14 +103,14 @@ app.post('/api/cambiar-estado-usuario', async (req, res) => {
 });
 
 app.post('/api/reportar-resena', async (req, res) => {
-    const { id_usuario, id_resena, motivo, comentario } = req.body;
+    const { id_resena, motivo, comentario } = req.body;
 
-    if (!id_usuario || !id_resena || !motivo || !comentario) {
+    if (!id_resena || !motivo || !comentario) {
         return res.status(400).json({ success: false, message: 'Faltan parámetros' });
     }
 
     try {
-        const result = await pool.query('SELECT crear_reporte_resena($1, $2, $3, $4);', [id_usuario, id_resena, motivo, comentario]);
+        const result = await pool.query('SELECT crear_reporte_resena($1, $2, $3);', [id_resena, motivo, comentario]);
 
         if (result.rows[0].crear_reporte_resena === 1) {
             res.json({ success: true });
