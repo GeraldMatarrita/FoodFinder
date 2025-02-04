@@ -12,6 +12,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 const pool = require('./db'); // Importa la conexión a PostgreSQL
+var cors = require('cors');
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 //Rutas
 app.use('/', routes);
