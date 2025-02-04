@@ -102,6 +102,48 @@ app.post('/api/cambiar-estado-usuario', async (req, res) => {
     }
 });
 
+app.post('/api/reportar-resena', async (req, res) => {
+    const { id_usuario, id_resena, motivo, comentario } = req.body;
+
+    if (!id_usuario || !id_resena || !motivo || !comentario) {
+        return res.status(400).json({ success: false, message: 'Faltan parámetros' });
+    }
+
+    try {
+        const result = await pool.query('SELECT crear_reporte_resena($1, $2, $3, $4);', [id_usuario, id_resena, motivo, comentario]);
+
+        if (result.rows[0].crear_reporte_resena === 1) {
+            res.json({ success: true });
+        } else {
+            res.status(500).json({ success: false, message: 'Error al crear el reporte de reseña' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
+});
+
+app.post('/api/reportar-restaurante', async (req, res) => {
+    const { id_usuario, id_restaurante, motivo, comentario } = req.body;
+
+    if (!id_usuario || !id_restaurante || !motivo || !comentario) {
+        return res.status(400).json({ success: false, message: 'Faltan parámetros' });
+    }
+
+    try {
+        const result = await pool.query('SELECT crear_reporte_restaurante($1, $2, $3, $4);', [id_usuario, id_restaurante, motivo, comentario]);
+
+        if (result.rows[0].crear_reporte_restaurante === 1) {
+            res.json({ success: true });
+        } else {
+            res.status(500).json({ success: false, message: 'Error al crear el reporte de restaurante' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
+});
+
 app.post('/api/editar-usuario', async (req, res) => {
     const { id_usuario, nombre, correo, contraseña, rol } = req.body;
 
@@ -125,38 +167,43 @@ app.post('/api/editar-usuario', async (req, res) => {
     }
 });
 
-/* ============================
-   Enviar solicitud para crear nuevo restaurante
-   Endpoint: POST /api/restaurant-request
-   Body:
-   {
-      "userId": number,
-      "nombre": "Nombre del restaurante",
-      "horario": "Hora apertura - cierre",
-      "descripcion": "Descripción",
-      "rangoprecio": "Rango de precio",
-      "imagenes": "URL o nombre de la imagen",
-      "tipocomida": "Nombre del tipo de comida",
-      "id_provincia": number,
-      "id_canton": number,
-      "id_distrito": number
-   }
-=============================== */
-app.post('/api/restaurant-request', async (req, res) => {
-    const { userId, nombre, horario, descripcion, rangoprecio, imagenes, tipocomida, id_provincia, id_canton, id_distrito } = req.body;
+app.post('/api/enviar-solicitud-restaurante', async (req, res) => {
+    const { nombre, horario, descripcion, rangoprecio, imagenes, id_usuario, id_tipocomida, id_ubicacion } = req.body;
+
     try {
-        const result = await pool.query(
-            'SELECT enviar_solicitud_restaurante($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) as message;',
-            [userId, nombre, horario, descripcion, rangoprecio, imagenes, tipocomida, id_provincia, id_canton, id_distrito]
-        );
-        const message = result.rows[0].message;
-        res.json({ success: true, message });
+        await pool.query('SELECT enviar_solicitud_restaurante($1, $2, $3, $4, $5, $6, $7, $8);',
+            [nombre, horario, descripcion, rangoprecio, imagenes, id_usuario, id_tipocomida, id_ubicacion]);
+
+        res.status(200).json({ success: true, message: 'Solicitud de restaurante enviada correctamente' });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: err.message });
+        console.error('Error al enviar la solicitud de restaurante:', err);
+        res.status(500).json({ success: false, message: 'Error interno del servidor' });
     }
 });
-//NO
+
+app.post('/api/gestionar-resenas', async (req, res) => {
+    const { id_reportereseña, codigo } = req.body;
+
+    try {
+        await pool.query('SELECT gestionar_reseñas($1, $2);', [id_reportereseña, codigo]);
+        res.status(200).json({ success: true, message: 'Reseña gestionada correctamente' });
+    } catch (err) {
+        console.error('Error al gestionar la reseña:', err);
+        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
+});
+
+app.post('/api/gestionar-solicitud-restaurante', async (req, res) => {
+    const { id_solicitud, codigo } = req.body;
+
+    try {
+        await pool.query('SELECT gestionar_solicitudes_restaurante($1, $2);', [id_solicitud, codigo]);
+        res.status(200).json({ success: true, message: 'Solicitud gestionada correctamente' });
+    } catch (err) {
+        console.error('Error al gestionar la solicitud de restaurante:', err);
+        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
+});
 
 /* ==================================================
    Obtener todas las provincias
