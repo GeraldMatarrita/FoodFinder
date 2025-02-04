@@ -275,6 +275,16 @@ app.get('/api/solicitudes-restaurante', async (req, res) => {
     }
 });
 
+app.get('/api/allrestaurantes', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM obtener_todos_restaurantes();');
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error al obtener los restaurantes:', err);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 /* ============================
    Obtener todos los usuarios
    Endpoint: GET /api/users
