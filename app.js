@@ -145,16 +145,16 @@ app.post('/api/reportar-restaurante', async (req, res) => {
 });
 
 app.post('/api/editar-usuario', async (req, res) => {
-    const { id_usuario, nombre, correo, contraseña, rol } = req.body;
+    const { id_usuario, nombre, correo, contrasena, rol } = req.body;
 
     // Validación de parámetros
-    if (!id_usuario || !nombre || !correo || !contraseña || !rol) {
+    if (!id_usuario || !nombre || !correo || !contrasena || !rol) {
         return res.status(400).json({ error: 'Faltan parámetros: id_usuario, nombre, correo, contraseña y rol son requeridos.' });
     }
 
     try {
         // Ejecutar la función de editar los datos del usuario
-        const result = await pool.query('SELECT editar_usuario($1, $2, $3, $4, $5) AS codigo;', [id_usuario, nombre, correo, contraseña, rol]);
+        const result = await pool.query('SELECT editar_usuario($1, $2, $3, $4, $5) AS codigo;', [id_usuario, nombre, correo, contrasena, rol]);
 
         if (result.rows[0].codigo === 1) {
             res.status(200).json({ codigo: 1 });  // Operación exitosa
@@ -182,10 +182,10 @@ app.post('/api/enviar-solicitud-restaurante', async (req, res) => {
 });
 
 app.post('/api/gestionar-resenas', async (req, res) => {
-    const { id_reportereseña, codigo } = req.body;
+    const { id_reporteresena, codigo } = req.body;
 
     try {
-        await pool.query('SELECT gestionar_reseñas($1, $2);', [id_reportereseña, codigo]);
+        await pool.query('SELECT gestionar_reseñas($1, $2);', [id_reporteresena, codigo]);
         res.status(200).json({ success: true, message: 'Reseña gestionada correctamente' });
     } catch (err) {
         console.error('Error al gestionar la reseña:', err);
@@ -201,6 +201,19 @@ app.post('/api/gestionar-solicitud-restaurante', async (req, res) => {
         res.status(200).json({ success: true, message: 'Solicitud gestionada correctamente' });
     } catch (err) {
         console.error('Error al gestionar la solicitud de restaurante:', err);
+        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
+});
+
+//Falta fk atributo usuario.id en restaurante
+app.post('/api/obtener-restaurantes-usuario', async (req, res) => {
+    const { id_usuario } = req.body;
+
+    try {
+        const result = await pool.query('SELECT * FROM obtener_restaurantes_usuario($1);', [id_usuario]);
+        res.status(200).json({ success: true, restaurantes: result.rows });
+    } catch (err) {
+        console.error('Error al obtener los restaurantes del usuario:', err);
         res.status(500).json({ success: false, message: 'Error interno del servidor' });
     }
 });
