@@ -61,7 +61,6 @@ app.post('/api/favoritos', async (req, res) => {
     }
 });
 
-
 /* ============================
    Buscar restaurante por nombre
    Endpoint: GET /api/restaurant-search?name=...
@@ -77,6 +76,52 @@ app.get('/api/restaurant-search', async (req, res) => {
     } catch (error) {
         console.error('Error al buscar restaurante:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+app.post('/api/cambiar-estado-usuario', async (req, res) => {
+    const { id_usuario, estado } = req.body;
+
+    // Validación de parámetros
+    if (!id_usuario || !estado) {
+        return res.status(400).json({ error: 'Faltan parámetros: id_usuario y estado son requeridos.' });
+    }
+
+    try {
+        // Ejecutar la función de cambiar el estado del usuario
+        const result = await pool.query('SELECT cambiar_estado_usuario($1, $2) AS codigo;', [id_usuario, estado]);
+
+        if (result.rows[0].codigo === 1) {
+            res.status(200).json({ codigo: 1 });  // Operación exitosa
+        } else {
+            res.status(400).json({ codigo: 0 });  // Error al cambiar el estado
+        }
+    } catch (err) {
+        console.error('Error al cambiar el estado del usuario:', err);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+app.post('/api/editar-usuario', async (req, res) => {
+    const { id_usuario, nombre, correo, contraseña, rol } = req.body;
+
+    // Validación de parámetros
+    if (!id_usuario || !nombre || !correo || !contraseña || !rol) {
+        return res.status(400).json({ error: 'Faltan parámetros: id_usuario, nombre, correo, contraseña y rol son requeridos.' });
+    }
+
+    try {
+        // Ejecutar la función de editar los datos del usuario
+        const result = await pool.query('SELECT editar_usuario($1, $2, $3, $4, $5) AS codigo;', [id_usuario, nombre, correo, contraseña, rol]);
+
+        if (result.rows[0].codigo === 1) {
+            res.status(200).json({ codigo: 1 });  // Operación exitosa
+        } else {
+            res.status(400).json({ codigo: 0 });  // Error al editar el usuario
+        }
+    } catch (err) {
+        console.error('Error al editar los datos del usuario:', err);
+        res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
 
@@ -163,6 +208,29 @@ app.get('/api/distritos', async (req, res) => {
     }
 });
 
+app.post('/api/nueva-resena', async (req, res) => {
+    const { id_usuario, id_restaurante, calificacion, comentario, estado } = req.body;
+
+    // Validación de parámetros
+    if (!id_usuario || !id_restaurante || !calificacion || !comentario || !estado) {
+        return res.status(400).json({ error: 'Faltan parámetros requeridos: id_usuario, id_restaurante, calificacion, comentario, estado.' });
+    }
+
+    try {
+        // Ejecutar la función de agregar una nueva reseña
+        const result = await pool.query('SELECT nueva_resena($1, $2, $3, $4, $5) AS codigo;', [id_usuario, id_restaurante, calificacion, comentario, estado]);
+
+        if (result.rows[0].codigo === 0) {
+            res.status(200).json({ codigo: 0 });  // El usuario ya dejó una reseña
+        } else {
+            res.status(200).json({ codigo: 1 });  // Reseña agregada correctamente
+        }
+    } catch (err) {
+        console.error('Error al agregar reseña:', err);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
 /* ============================
    Obtener favoritos de un usuario
    Endpoint: GET /api/favorites?userId=...
@@ -201,7 +269,6 @@ app.get('/api/restaurant-info', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
-
 
 /* ============================
    Obtener todos los reportes de reseña
