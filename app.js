@@ -48,15 +48,19 @@ app.post('/api/favoritos', async (req, res) => {
 
     try {
         // Ejecutar la función de agregar favorito
-        await pool.query('SELECT agregar_favorito($1, $2);', [id_usuario, id_restaurante]);
+        const result = await pool.query('SELECT agregar_favorito($1, $2) AS codigo;', [id_usuario, id_restaurante]);
 
-        res.status(200).json({ message: 'Restaurante añadido a favoritos correctamente.' });
+        if (result.rows[0].codigo === 0) {
+            res.status(200).json({ codigo: 0 });  // Ya estaba en favoritos
+        } else {
+            res.status(200).json({ codigo: 1 });  // Favorito añadido correctamente
+        }
     } catch (err) {
         console.error('Error al agregar restaurante a favoritos:', err);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
-//NO
+
 
 /* ============================
    Buscar restaurante por nombre
